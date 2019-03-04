@@ -4,12 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="cloud.headsup.MainActivity">
+    tools:context="cloud.headsup.controller.MainActivity">
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="600px"
+        android:layout_marginTop="100dp"
         android:text="START LISTENING SERVICE"
         android:id="@+id/btn_start"/>
     <Button
@@ -17,5 +17,24 @@
         android:layout_height="wrap_content"
         android:text="STOP LISTENING SERVICE"
         android:id="@+id/btn_stop"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_marginTop="200dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PLOT DATA"
+            android:id="@+id/btn_plot"
+            android:drawableEnd="@drawable/arrow_right"
+            android:drawablePadding="5dp"/>
+    </LinearLayout>
+
+
+
 
 </LinearLayout>

@@ -1,4 +1,4 @@
-package cloud.headsup;
+package cloud.headsup.controller;
 
 import android.content.Intent;
 import android.hardware.Sensor;
@@ -9,10 +9,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.JobIntentService;
 import android.util.Log;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import cloud.headsup.model.JSONRequestHandler;
+
 import java.util.Date;
+import java.util.Random;
 
 
 /**
@@ -24,7 +24,6 @@ public class BackgroundIntent extends JobIntentService {
     private SensorManager sensorManager;
     private Sensor proximitySensor;
     private SensorEventListener proximitySensorListener;
-    private ArrayList<String> readings = new ArrayList<>();
 
 
 
@@ -37,14 +36,18 @@ public class BackgroundIntent extends JobIntentService {
 
     @Override
     protected void onHandleWork(@Nullable Intent intent) {
+
+        final Random rnd = new Random();
         if (proximitySensor != null) {
             proximitySensorListener = new SensorEventListener() {
                 @Override
                 public void onSensorChanged(SensorEvent sensorEvent) {
+
+                    float randomReading = rnd.nextFloat() * 2;
+                    float randomReadingBig = 7 + rnd.nextFloat() * 1.5f;
                     Log.d("Prox sensor", "Proximity distance: " + sensorEvent.values[0]);
-                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                    readings.add(dateFormat.format(new Date()) + " " + sensorEvent.values[0]);
-                    Log.d("Reading", readings.get(readings.size() - 1));
+                    JSONRequestHandler.sendJSONPostRequest(new Date(), sensorEvent.values[0] < 9 ? sensorEvent.values[0] + randomReading :
+                    sensorEvent.values[0] - randomReadingBig);
                 }
 
                 @Override
