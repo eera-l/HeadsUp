@@ -7,10 +7,12 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.JobIntentService;
+import android.text.format.DateUtils;
 import android.util.Log;
 
 import cloud.headsup.model.JSONRequestHandler;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
@@ -24,7 +26,8 @@ public class BackgroundIntent extends JobIntentService {
     private SensorManager sensorManager;
     private Sensor proximitySensor;
     private SensorEventListener proximitySensorListener;
-
+    private Date now;
+    private Calendar calendar;
 
 
     @Override
@@ -32,6 +35,9 @@ public class BackgroundIntent extends JobIntentService {
         super.onCreate();
         sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
         proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+        now = new Date();
+        calendar = Calendar.getInstance();
+        calendar.setTime(now);
     }
 
     @Override
@@ -43,11 +49,26 @@ public class BackgroundIntent extends JobIntentService {
                 @Override
                 public void onSensorChanged(SensorEvent sensorEvent) {
 
-                    float randomReading = rnd.nextFloat() * 2;
-                    float randomReadingBig = 7 + rnd.nextFloat() * 1.5f;
+                    int numOfTimes;
+
+                    //float randomReading = rnd.nextFloat() * 2;
+                    //float randomReadingBig = 7 + rnd.nextFloat() * 1.5f;
                     Log.d("Prox sensor", "Proximity distance: " + sensorEvent.values[0]);
-                    JSONRequestHandler.sendJSONPostRequest(new Date(), sensorEvent.values[0] < 9 ? sensorEvent.values[0] + randomReading :
-                    sensorEvent.values[0] - randomReadingBig);
+
+                    if (sensorEvent.values[0] > 1) {
+                        numOfTimes = rnd.nextInt(3) + 2;
+                    } else {
+                        numOfTimes = rnd.nextInt(3) + 2;
+                    }
+
+
+
+                    for (int i = 0; i < numOfTimes; i++) {
+
+                        calendar.add(Calendar.SECOND, 3);
+                        Log.d("Datestamp: ", calendar.getTime().toString());
+                        JSONRequestHandler.sendJSONPostRequest(calendar.getTime(), sensorEvent.values[0] > 1 ? 1 : 0);
+                    }
                 }
 
                 @Override

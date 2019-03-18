@@ -12,6 +12,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.LabelFormatter;
+import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -19,11 +21,13 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Locale;
 
 import cloud.headsup.R;
 import cloud.headsup.model.MyVolley;
@@ -53,11 +57,11 @@ public class GraphActivity extends AppCompatActivity {
                             }
                             Log.d("Array result ", Arrays.toString(results.toArray()));
                             ArrayList<String> dateStrings = new ArrayList<>();
-                            ArrayList<Float> distances = new ArrayList<>();
+                            ArrayList<Integer> distances = new ArrayList<>();
 
                             for (String s : results) {
                                 dateStrings.add(s.substring(13, 32).replace('T', ' '));
-                                distances.add(Float.parseFloat(s.substring(45, 49)));
+                                distances.add(Integer.parseInt(s.substring(45, 46)));
                             }
                             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                             ArrayList<Date> dates = new ArrayList<>();
@@ -79,9 +83,27 @@ public class GraphActivity extends AppCompatActivity {
                             LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPoints);
 
                             graphView.addSeries(series);
+                            final DateFormat dateFormat = new SimpleDateFormat("mm:ss");
 
-                            graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(GraphActivity.this));
-                            graphView.getGridLabelRenderer().setNumHorizontalLabels(dates.size()); // only 4 because of the space
+                            //graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(GraphActivity.this));
+                            graphView.getGridLabelRenderer().setLabelFormatter(new LabelFormatter() {
+                                @Override
+                                public String formatLabel(double value, boolean isValueX) {
+                                    // TODO Auto-generated method stub
+                                    if (isValueX) {
+                                        Date d = new Date((long) (value));
+                                        return (dateFormat.format(d));
+                                    } else {
+                                        return String.format(Locale.ENGLISH,"%.2f", value);
+                                    }
+                                }
+
+                                @Override
+                                public void setViewport(Viewport viewport) {
+
+                                }
+                            });
+                            graphView.getGridLabelRenderer().setNumHorizontalLabels(5); // only 4 because of the space
 
                             // set manual x bounds to have nice steps
                             graphView.getViewport().setMinX(dates.get(0).getTime());
@@ -90,7 +112,7 @@ public class GraphActivity extends AppCompatActivity {
 
                             // as we use dates as labels, the human rounding to nice readable numbers
                             // is not necessary
-                            graphView.getGridLabelRenderer().setHumanRounding(false);
+                            //graphView.getGridLabelRenderer().setHumanRounding(false);
 
                         } catch (JSONException je) {
                             je.printStackTrace();
