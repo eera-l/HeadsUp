@@ -1,3 +1,9 @@
+/**
+* BackgroundIntent.java
+* Author: Federica Comuni
+* Function.: Reads the proximity sensor as a background service and, upon 
+* change of distance, POSTS data through JSONRequestHandler.java.
+*/
 package cloud.headsup.controller;
 
 import android.content.Intent;
@@ -51,10 +57,10 @@ public class BackgroundIntent extends JobIntentService {
 
                     int numOfTimes;
 
-                    //float randomReading = rnd.nextFloat() * 2;
-                    //float randomReadingBig = 7 + rnd.nextFloat() * 1.5f;
+                  
                     Log.d("Prox sensor", "Proximity distance: " + sensorEvent.values[0]);
 
+                    //Generates a random number between 2 and 4
                     if (sensorEvent.values[0] > 1) {
                         numOfTimes = rnd.nextInt(3) + 2;
                     } else {
@@ -62,7 +68,7 @@ public class BackgroundIntent extends JobIntentService {
                     }
 
 
-
+                    //Saves as many number of times a sensor reading
                     for (int i = 0; i < numOfTimes; i++) {
 
                         calendar.add(Calendar.SECOND, 3);
