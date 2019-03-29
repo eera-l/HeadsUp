@@ -1,3 +1,10 @@
+/**
+* GraphActivity.java
+* Author: Federica Comuni
+* Function.: Gets sensor readings through JSONRequestHandler.java
+* and plots them in a graph.
+*/
+
 package cloud.headsup.controller;
 
 import android.provider.ContactsContract;
@@ -60,6 +67,7 @@ public class GraphActivity extends AppCompatActivity {
                             ArrayList<Integer> distances = new ArrayList<>();
 
                             for (String s : results) {
+                                //for ISO date format
                                 dateStrings.add(s.substring(13, 32).replace('T', ' '));
                                 distances.add(Integer.parseInt(s.substring(45, 46)));
                             }
@@ -103,16 +111,14 @@ public class GraphActivity extends AppCompatActivity {
 
                                 }
                             });
-                            graphView.getGridLabelRenderer().setNumHorizontalLabels(5); // only 4 because of the space
+                            graphView.getGridLabelRenderer().setNumHorizontalLabels(5); 
 
-                            // set manual x bounds to have nice steps
+                            
                             graphView.getViewport().setMinX(dates.get(0).getTime());
                             graphView.getViewport().setMaxX(dates.get(dates.size() - 1).getTime());
                             graphView.getViewport().setXAxisBoundsManual(true);
 
-                            // as we use dates as labels, the human rounding to nice readable numbers
-                            // is not necessary
-                            //graphView.getGridLabelRenderer().setHumanRounding(false);
+                          
 
                         } catch (JSONException je) {
                             je.printStackTrace();
