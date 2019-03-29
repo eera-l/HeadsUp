@@ -1,3 +1,8 @@
+/**
+* MyVolley.java
+* Author: Federica Comuni
+* Function.: Singleton for VolleyQueue.
+*/
 package cloud.headsup.model;
 
 import android.app.ActivityManager;
