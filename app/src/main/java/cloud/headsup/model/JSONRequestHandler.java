@@ -1,3 +1,8 @@
+/**
+* JSONRequestHandler.java
+* Author: Federica Comuni
+* Function.: sends POST and GET request to web API using Volley.
+**/
 package cloud.headsup.model;
 
 import android.util.Log;
@@ -25,6 +30,10 @@ import java.util.Locale;
 
 public class JSONRequestHandler {
 
+    /**
+    * Puts timestamp, distance and user ID in a JSON object
+    * and sends it as body of a POST request.
+    */
     public static void sendJSONPostRequest(Date timestamp, float distance) {
         RequestQueue queue = MyVolley.getRequestQueue();
         HashMap<String, String> params = new HashMap<>();
@@ -42,6 +51,10 @@ public class JSONRequestHandler {
         queue.add(myReq);
     }
 
+    /**
+    * Sends GET request to API and stores
+    * response in ArrayList
+    */
     public static ArrayList<String> sendJSONGetRequest() {
 
         RequestQueue queue = MyVolley.getRequestQueue();
@@ -69,6 +82,9 @@ public class JSONRequestHandler {
         return results;
     }
 
+    /**
+    * Returns message on successful request.
+    */
     private static Response.Listener<JSONObject> createMyReqSuccessListener() {
         return new Response.Listener<JSONObject>() {
             @Override
@@ -95,7 +111,9 @@ public class JSONRequestHandler {
         };
     }
 
-
+    /**
+    * Returns error message on unsuccessful request.
+    */
     private static Response.ErrorListener createMyReqErrorListener() {
         return new Response.ErrorListener() {
             @Override
